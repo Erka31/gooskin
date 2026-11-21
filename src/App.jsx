@@ -36,7 +36,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [config, setConfig] = useState(DEFAULT_CONFIG);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined); // undefined = шалгаж байна
   const [serverCats, setServerCats] = useState(null); // null = серверээс ирээгүй
 
   // Шүүлтүүр
@@ -50,7 +50,9 @@ export default function App() {
   const [ordersOpen, setOrdersOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const cart = useCart(products);
+  // Сагс хэрэглэгч бүрт тусдаа (гарахад өмнөх хүний сагс харагдахгүй)
+  const cartOwner = user === undefined ? null : user ? "u" + user.id : "guest";
+  const cart = useCart(products, cartOwner);
   const [toast, setToast] = useToast();
 
   const loadProducts = () =>
@@ -76,8 +78,8 @@ export default function App() {
       .then((c) => setConfig({ ...DEFAULT_CONFIG, ...c }))
       .catch(() => {});
     api("/auth/me")
-      .then(setUser)
-      .catch(() => {});
+      .then((u) => setUser(u || null))
+      .catch(() => setUser(null));
   }, [isAdmin]);
 
   if (isAdmin) return <Admin />;
@@ -110,6 +112,8 @@ export default function App() {
       /* ignore */
     }
     setUser(null);
+    setOrdersOpen(false);
+    setProfileOpen(false);
     setToast("Системээс гарлаа");
   };
 
@@ -190,6 +194,7 @@ export default function App() {
       <Footer onOrders={openOrders} />
 
       <CartDrawer
+        key={cartOwner || "pending"}
         open={cartOpen}
         onClose={() => setCartOpen(false)}
         items={cart.items}
@@ -222,7 +227,7 @@ export default function App() {
           onDone={onAuthDone}
         />
       )}
-      {ordersOpen && (
+      {ordersOpen && user && (
         <MyOrders
           onClose={() => setOrdersOpen(false)}
           onChanged={loadProducts}
