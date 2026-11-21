@@ -50,7 +50,17 @@ if (problems.length) {
   console.warn("\nАнхааруулга (production-д заавал засна):\n" + msg + "\n");
 }
 
-app.listen(PORT, () => {
+app.listen(PORT, (err) => {
+  // Express 5 порт эзэлсэн гэх мэт алдааг энд дамжуулна
+  if (err) {
+    console.error(
+      err.code === "EADDRINUSE"
+        ? `\n❌ ${PORT} порт өөр програмд (хуучин сервер?) эзлэгдсэн байна.\n` +
+            `   Хуучин серверээ зогсооно уу:  lsof -ti :${PORT} | xargs kill\n`
+        : `\n❌ Сервер асаж чадсангүй: ${err.message}\n`,
+    );
+    process.exit(1);
+  }
   console.log(
     `${IS_PROD ? "Production" : "Development"} сервер: http://localhost:${PORT}  (${PUBLIC_URL})`,
   );
