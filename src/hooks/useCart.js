@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 //   "guest"  → нэвтрээгүй зочин   (localStorage: cart:guest)
 //   "u12"    → 12 дугаартай хэрэглэгч (localStorage: cart:u12)
 //   null     → нэвтэрсэн эсэх нь хараахан тодорхойгүй (хадгалахгүй)
-// Гарахад тухайн хэрэглэгчийн сагс харагдахаа болино, дахин нэвтрэхэд сэргэнэ.
-// Зочин байхдаа сагсалсан барааг нэвтэрмэгц өөрийнх нь сагс руу нийлүүлнэ.
+// Сагснууд бие биедээ огт холбогдохгүй: нэвтрэхэд зочны сагс харагдахгүй,
+// гарахад хэрэглэгчийн сагс харагдахгүй. Дахин нэвтрэхэд өөрийн сагс сэргэнэ.
 const LEGACY_KEY = "cart"; // хуучин хувилбарын нийтийн сагс
 const keyOf = (owner) => "cart:" + owner;
 
@@ -55,17 +55,12 @@ export default function useCart(products, owner) {
   useEffect(() => {
     if (!owner) return;
     let next = read(keyOf(owner));
+    // Хуучин хувилбарын нийтийн сагсыг зочных гэж үзнэ
     const legacy = read(LEGACY_KEY);
-    drop(LEGACY_KEY);
-    if (owner === "guest") {
-      next = merge(next, legacy);
-    } else {
-      // Зочин байхдаа сагсалсныг хэрэглэгчийн сагс руу шилжүүлнэ
-      const guest = merge(read(keyOf("guest")), legacy);
-      if (guest.length) {
-        next = merge(next, guest);
-        drop(keyOf("guest"));
-      }
+    if (legacy.length) {
+      write(keyOf("guest"), merge(read(keyOf("guest")), legacy));
+      drop(LEGACY_KEY);
+      if (owner === "guest") next = read(keyOf("guest"));
     }
     setCart(next);
     setLoadedFor(owner);
