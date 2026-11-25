@@ -17,7 +17,6 @@ import { navigate, productPath } from "./lib/router";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Banner from "./components/home/Banner";
-import Brands from "./components/home/Brands";
 import CategoryTiles from "./components/home/CategoryTiles";
 import Features from "./components/home/Features";
 import ProductGrid from "./components/products/ProductGrid";
@@ -187,7 +186,6 @@ export default function App() {
               setCat("Бүгд");
             }}
           />
-          <Brands brands={brands} />
         </>
       )}
 
