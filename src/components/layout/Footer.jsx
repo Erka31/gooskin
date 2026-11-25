@@ -74,7 +74,6 @@ export default function Footer({ onOrders }) {
         <div>
           <h4>{BRAND}</h4>
           <Link to="/p/about">Бидний тухай</Link>
-          <Link to="/p/stores">Дэлгүүрүүдийн байршил</Link>
           <Link to="/p/contact">Холбоо барих</Link>
         </div>
         <div>

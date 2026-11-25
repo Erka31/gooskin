@@ -17,6 +17,7 @@ function Check({ ok, label, hint }) {
 
 function ChangePassword() {
   const [f, setF] = useState({ current: "", next: "", again: "" });
+  const [show, setShow] = useState(false); // нууц үгийг ил харуулах эсэх
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
 
@@ -33,6 +34,7 @@ function ChangePassword() {
         body: { current: f.current, next: f.next },
       });
       setF({ current: "", next: "", again: "" });
+      setShow(false);
       setMsg(
         "Нууц үг солигдлоо. Бусад төхөөрөмж дээрх нэвтрэлт хүчингүй боллоо.",
       );
@@ -46,7 +48,7 @@ function ChangePassword() {
       <span>{ph}</span>
       <input
         required
-        type="password"
+        type={show ? "text" : "password"}
         autoComplete={ac}
         value={f[k]}
         onChange={(e) => setF({ ...f, [k]: e.target.value })}
@@ -62,6 +64,14 @@ function ChangePassword() {
         {field("next", "Шинэ нууц үг (10+ тэмдэгт)", "new-password")}
         {field("again", "Шинэ нууц үг давтах", "new-password")}
       </div>
+      <button
+        type="button"
+        className="show-pw"
+        onClick={() => setShow((v) => !v)}
+        aria-pressed={show}
+      >
+        {show ? "🙈 Нууц үг нуух" : "👁 Нууц үг харуулах"}
+      </button>
       {err && <p className="error">{err}</p>}
       {msg && <p className="note">{msg}</p>}
       <div>

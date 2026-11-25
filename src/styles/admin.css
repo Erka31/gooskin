@@ -1284,3 +1284,18 @@ td select:focus {
     grid-template-columns: 1fr;
   }
 }
+
+.show-pw {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #52525b;
+  cursor: pointer;
+}
+.show-pw:hover {
+  color: #d90429;
+}

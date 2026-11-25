@@ -26,21 +26,6 @@ export default function InfoPage({ slug }) {
             ))}
           </div>
         )}
-        {page.stores && (
-          <div className="stores">
-            {page.stores.map(([name, addr, hours]) => (
-              <div className="store" key={name}>
-                <h3>
-                  <Icon name="pin" size={18} /> {name}
-                </h3>
-                <p>{addr}</p>
-                <small>
-                  <Icon name="clock" size={14} /> {hours} · Өдөр бүр
-                </small>
-              </div>
-            ))}
-          </div>
-        )}
         {page.contact && (
           <div className="contact-grid">
             <div className="contact-cards">
@@ -59,10 +44,10 @@ export default function InfoPage({ slug }) {
                 </span>
               </a>
               <div>
-                <Icon name="pin" size={20} />
+                <Icon name="truck" size={20} />
                 <span>
-                  <small>Хаяг</small>
-                  <b>{SHOP_INFO.address}</b>
+                  <small>Онлайн дэлгүүр</small>
+                  <b>Биет дэлгүүргүй · зөвхөн хүргэлтээр</b>
                 </span>
               </div>
               <p className="hint">Ихэвчлэн 1 ажлын өдрийн дотор хариулна.</p>
